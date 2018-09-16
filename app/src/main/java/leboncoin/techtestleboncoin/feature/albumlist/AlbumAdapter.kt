@@ -16,8 +16,8 @@ class AlbumAdapter(val albumList: List<Album>): RecyclerView.Adapter<AlbumAdapte
 
         Picasso.get()
                 .load(albumList[position].thumbnailUrl)
-                .resize(50, 50)
-                .centerCrop()
+              //  .resize(150, 150)
+              //  .centerCrop()
                 .into(holder.albumImage)
     }
 
