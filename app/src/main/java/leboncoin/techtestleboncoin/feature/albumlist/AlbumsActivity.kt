@@ -1,7 +1,9 @@
 package leboncoin.techtestleboncoin.feature.albumlist
 
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.LinearLayout
@@ -25,21 +27,48 @@ class AlbumsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_albums)
 
 
+        //defining the direction of the RecyclerView
         albumsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
+        //initializing our local DB
         mDb = AppDataBase.getInstance(this)
 
-        if (NetworkUtils.isConnectedToInternet(this)){
 
-            retrieveAllAlbums()
+        pupulateList();
 
-        }else{
-            fetchAlbumsDataFromDb()
+        swipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.colorAccent));
+
+        //listener for pull to refresh
+        swipeRefreshLayout.setOnRefreshListener {
+
+            this@AlbumsActivity.pupulateList()
+
         }
+
     }
 
+
     /**
-    this function retrieves all albums from the API and prints a log with the number of albums available
+    this function populates our recyclerView
+     */
+   fun pupulateList(){
+       //checking if there is any internet connection
+       if (NetworkUtils.isConnectedToInternet(this)){
+
+           //fetch albums from API
+           retrieveAllAlbums()
+
+       }else{
+           Toast.makeText(this@AlbumsActivity,getString(R.string.no_internet_message) , Toast.LENGTH_LONG).show()
+
+           //fetch albums from DB
+           fetchAlbumsDataFromDb()
+       }
+
+   }
+
+    /**
+    this function retrieves all albums from the API and changes the recyclerview's adapter
      */
     private fun retrieveAllAlbums(){
 
@@ -55,30 +84,48 @@ class AlbumsActivity : AppCompatActivity() {
                    insertAlbumsDataInDb(result);
                }, { error ->
                    error.printStackTrace()
+               },{
+                   //hide the loading animation
+                   swipeRefreshLayout.isRefreshing = false
                })
 
     }
 
 
+    /**
+    this function retrieves all albums from the DB and changes the recyclerview's adapter
+     */
     private fun fetchAlbumsDataFromDb() {
+
        doAsync {
+            //calling DB to retrieve all albums
             val albums = mDb?.albumsDataDao()?.getAll()
 
 
             uiThread {
+
+                //no albums found
                 if (albums == null || albums?.size == 0) {
-                    Toast.makeText(this@AlbumsActivity,"No albums found !", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AlbumsActivity,getString(R.string.no_albums), Toast.LENGTH_SHORT).show()
                 } else {
                     albumsRecyclerView.adapter = AlbumAdapter(albums)
                 }
+
+                //hide the loading animation
+                swipeRefreshLayout.isRefreshing = false
             }
 
         }
 
     }
 
+    /**
+     * this function inserts a list of albums into the DB
+     */
     private fun insertAlbumsDataInDb(albums: List<Album>) {
         doAsync {
+
+            //calling DB to insert albums
             mDb?.albumsDataDao()?.insertAll(albums)
         }
     }
