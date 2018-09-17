@@ -21,7 +21,5 @@ interface AlbumsDao {
     @Query("DELETE from albums")
     fun deleteAll()
 
-    @Query("SELECT count(*) from albums")
-    fun count(): Int
 
 }

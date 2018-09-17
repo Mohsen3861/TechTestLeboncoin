@@ -4,9 +4,10 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
-/*
-this data class will contain some informations about an album
+/**
+this data class will contain some information about an album
  */
+
 @Entity(tableName = "albums")
 data class Album (
         @PrimaryKey val id:Long,

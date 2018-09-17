@@ -9,15 +9,15 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import leboncoin.techtestleboncoin.R
 
-class AlbumAdapter(val albumList: List<Album>): RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
+class AlbumAdapter(private val albumList: List<Album>): RecyclerView.Adapter<AlbumAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
+        //setting title of the album
         holder.albumTitle?.text = albumList[position].title
 
+        //loading the image of the album
         Picasso.get()
                 .load(albumList[position].thumbnailUrl)
-              //  .resize(150, 150)
-              //  .centerCrop()
                 .into(holder.albumImage)
     }
 
@@ -33,8 +33,8 @@ class AlbumAdapter(val albumList: List<Album>): RecyclerView.Adapter<AlbumAdapte
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val albumTitle = itemView.findViewById<TextView>(R.id.titleTextView)
-        val albumImage = itemView.findViewById<ImageView>(R.id.albumImageView)
+        val albumTitle = itemView.findViewById<TextView>(R.id.titleTextView)!!
+        val albumImage = itemView.findViewById<ImageView>(R.id.albumImageView)!!
 
     }
 

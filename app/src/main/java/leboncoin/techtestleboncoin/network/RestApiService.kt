@@ -24,7 +24,7 @@ interface RestApiService {
                     .baseUrl(Constants.BASE_URL)
                     .build()
 
-            return retrofit.create(RestApiService::class.java);
+            return retrofit.create(RestApiService::class.java)
         }
     }
 }

@@ -16,6 +16,8 @@ abstract class AppDataBase :RoomDatabase(){
         private var INSTANCE: AppDataBase? = null
 
         fun getInstance(context: Context): AppDataBase? {
+
+            //checking if database is already intialized
             if (INSTANCE == null) {
                 synchronized(AppDataBase::class) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
