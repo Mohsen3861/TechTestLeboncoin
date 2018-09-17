@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+kapt {
+    correctErrorTypes = true
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -36,6 +42,18 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     implementation "com.squareup.retrofit2:converter-gson:2.3.0"
 
+    // rxjava
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+    //recylerview
+    implementation 'com.android.support:recyclerview-v7:28.0.0-rc02'
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    //room library
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+
+    implementation "org.jetbrains.anko:anko-commons:0.10.6"
+
 
 }
